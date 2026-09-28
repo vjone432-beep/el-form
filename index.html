@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ElectroBill - Electricity Billing & Customer Management</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <aside class="sidebar">
+    <div class="brand">⚡ ElectroBill</div>
+    <button class="nav-btn active" data-page="dashboard">Dashboard</button>
+    <button class="nav-btn" data-page="customers">Customers</button>
+    <button class="nav-btn" data-page="billing">Generate Bill</button>
+    <button class="nav-btn" data-page="bills">Bill History</button>
+  </aside>
+
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <h1 id="pageTitle">Dashboard</h1>
+        <p>Electricity Billing & Customer Management System</p>
+      </div>
+      <div class="date" id="today"></div>
+    </header>
+
+    <section id="dashboard" class="page active">
+      <div class="cards">
+        <div class="card"><span>Total Customers</span><strong id="totalCustomers">0</strong></div>
+        <div class="card"><span>Total Bills</span><strong id="totalBills">0</strong></div>
+        <div class="card"><span>Paid Bills</span><strong id="paidBills">0</strong></div>
+        <div class="card"><span>Pending Bills</span><strong id="pendingBills">0</strong></div>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Recent Bills</div>
+        <div id="recentBills"></div>
+      </div>
+    </section>
+
+    <section id="customers" class="page">
+      <div class="toolbar">
+        <input id="customerSearch" placeholder="Search customer name, ID or meter...">
+        <button class="primary" onclick="openCustomerModal()">+ Add Customer</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Customer List</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>ID</th><th>Name</th><th>Phone</th><th>Address</th><th>Meter No.</th><th>Actions</th></tr></thead>
+            <tbody id="customerTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <section id="billing" class="page">
+      <div class="panel form-panel">
+        <div class="panel-title">Generate Electricity Bill</div>
+        <form id="billForm">
+          <div class="grid">
+            <label>Customer
+              <select id="billCustomer" required></select>
+            </label>
+            <label>Billing Month
+              <input type="month" id="billMonth" required>
+            </label>
+            <label>Previous Reading
+              <input type="number" id="previousReading" min="0" required>
+            </label>
+            <label>Current Reading
+              <input type="number" id="currentReading" min="0" required>
+            </label>
+          </div>
+          <div class="bill-preview">
+            <div>Units Consumed <strong id="unitsPreview">0</strong></div>
+            <div>Energy Charge <strong id="energyPreview">₹0.00</strong></div>
+            <div>Fixed Charge <strong>₹50.00</strong></div>
+            <div>Total Amount <strong id="totalPreview">₹0.00</strong></div>
+          </div>
+          <button class="primary" type="submit">Generate Bill</button>
+        </form>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Tariff Used</div>
+        <p class="muted">Mini-project tariff: 0–100 units ₹2/unit, 101–200 ₹3/unit, 201–500 ₹5/unit, above 500 ₹7/unit + ₹50 fixed charge.</p>
+      </div>
+    </section>
+
+    <section id="bills" class="page">
+      <div class="toolbar">
+        <input id="billSearch" placeholder="Search bill ID or customer...">
+        <button class="secondary" onclick="exportBills()">Export CSV</button>
+      </div>
+      <div class="panel">
+        <div class="panel-title">Bill History</div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Bill ID</th><th>Customer</th><th>Month</th><th>Units</th><th>Amount</th><th>Status</th><th>Action</th></tr></thead>
+            <tbody id="billTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="customerModal">
+    <div class="modal-box">
+      <div class="modal-head"><h2 id="modalTitle">Add Customer</h2><button onclick="closeCustomerModal()">×</button></div>
+      <form id="customerForm">
+        <input type="hidden" id="editCustomerId">
+        <label>Customer Name<input id="customerName" required></label>
+        <label>Phone Number<input id="customerPhone" required pattern="[0-9]{10}"></label>
+        <label>Address<textarea id="customerAddress" required></textarea></label>
+        <label>Meter Number<input id="meterNumber" required></label>
+        <button class="primary" type="submit">Save Customer</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+  <script src="script.js"></script>
+</body>
+</html>
